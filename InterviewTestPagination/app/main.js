@@ -27,7 +27,16 @@
         function controller($scope, $http) { // example controller creating the scope bindings
             $scope.todos = [];
             // example of xhr call to the server's 'RESTful' api
+            // for enterprise it will be better to get only meta data totalItem.count insteads of whole records table
             $http.get("api/Todo/Todos").then(response => $scope.todos = response.data);
+
+
+            // api service call to return only the request items
+            $scope.goLoadPage = function(pNo, pSize) {
+                // service to call search api to return the only currentpage data
+                //$http.get("api/Todo/Search?entity=todo&pNo" + pNo + "&pSize=" & pSize).then(response => $scope.todos = response.data);
+                alert('goLoadPage');
+            };
         }
 
         function link(scope, element, attrs) { }
@@ -49,12 +58,52 @@
         var directive = {
             restrict: "E", // example setup as an element only
             templateUrl: "app/templates/pagination.html",
-            scope: {}, // example empty isolate scope
+            scope: {
+                todos: "=" // the array of todo list
+            }, // example empty isolate scope
             controller: ["$scope", controller],
-            link: link
+            link: function (scope, element, attrs) {
+
+                if (!scope.curPage) {
+                    scope.curPage = 1;                    
+                }
+
+                if (!scope.pSize) {
+                    scope.pSize = 20;
+                    // dropdownlist need to select option 20
+
+                }
+
+                if (!scope.totalPage) {
+                    scope.totalPage = scope.todos.length - (scope.todos.length % scope.pSize);
+                }
+
+                scope.first = function () {
+                    //alert('first');
+                    $scope.goLoadPage(1, scope.pSize);
+                }
+
+                scope.goto = function (pageNo) {
+                    //alert('go to page# ' +  pageNo);
+                    $scope.goLoadPage(pageNo, scope.pSize);
+                }
+
+                scope.last = function () {
+                    //alert('last');
+                    $scope.goLoadPage(scope.totalPage, scope.pSize);
+                }
+
+                scope.updateSize = function() {
+                    if (scope.pSize == 'all')
+                        scope.pSize = scope.todos.length;
+                    //alert('updatesize=' + scope.pSize);
+                }
+
+            }
         };
 
-        function controller($scope) { }
+        function controller($scope) {
+        }
 
         function link(scope, element, attrs) { }
 
