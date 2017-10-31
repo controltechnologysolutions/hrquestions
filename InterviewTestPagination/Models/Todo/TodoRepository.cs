@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InterviewTestPagination.Models.DTO;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace InterviewTestPagination.Models.Todo {
     /// (e.g. dont create new model instances when executing a search 'query', etc).
     /// TL;DR: from this point on Database-like operations can be mocked.
     /// </summary>
-    public class TodoRepository : IModelRepository<Todo> {
+    public class TodoRepository : IModelRepository<Todo>
+    {
 
         /// <summary>
         /// Example in-memory model datasource 'indexed' by id.
@@ -31,5 +33,39 @@ namespace InterviewTestPagination.Models.Todo {
             return DataSource.Values.OrderByDescending(t => t.CreatedDate);
         }
 
+        public TodoPaginated AllPaged(int page, int pageSize, string orderBy, bool ascending)
+        {
+            var skipAmount = pageSize * (page - 1);
+
+            var projection = DataSource.Values
+                .Skip(skipAmount)
+                .Take(pageSize);
+
+            var propertyInfo = typeof(Todo).GetProperty(orderBy);
+            if (ascending)
+            {
+                projection = projection.OrderBy(x => propertyInfo.GetValue(x, null));
+            }
+            else
+            {
+                projection = projection.OrderByDescending(x => propertyInfo.GetValue(x, null));
+            }
+
+            var totalNumberOfRecords = DataSource.Values.Count;
+            var results = projection.ToList();
+
+            var mod = totalNumberOfRecords % pageSize;
+            var totalPageCount = (totalNumberOfRecords / pageSize) + (mod == 0 ? 0 : 1);
+
+
+            return new TodoPaginated
+            {
+                Results = results,
+                Currentpage = page,
+                PageSize = pageSize,
+                TotalNumberOfPages = totalPageCount,
+                TotalNumberOfRecords = totalNumberOfRecords
+            };
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿<!-- table of contents -->
+<p>Ordered by Created Date by default.</p>
 <table>
     <!-- table:header -->
     <tr>
@@ -21,9 +22,18 @@
             . the indicators don't need to look pretty, they just have to be distinct (ascending from descending) and communicate well what they're doing
 
         -->
-        <th>Id </th>
-        <th>Task </th>
-        <th>Created Date </th>
+        <th><a href="#" ng-click="orderByField='Id'; ascendingSort = !ascendingSort">
+                Id <span ng-show="ascendingSort" style="font-family: 'Courier New'; font-size: 9px;">v</span><span ng-show="!ascendingSort" style="font-family: 'Courier New'; font-size: 11px;">^</span>
+            </a>
+        </th>
+        <th> <a href="#" ng-click="orderByField='Task'; ascendingSort = !ascendingSort">
+                 Task <span ng-show="ascendingSort" style="font-family: 'Courier New'; font-size: 9px;">v</span><span ng-show="!ascendingSort" style="font-family: 'Courier New'; font-size: 11px;">^</span>
+            </a>
+        </th>
+        <th><a href="#" ng-click="orderByField='CreatedDate'; ascendingSort = !ascendingSort">
+                Created Date <span ng-show="ascendingSort" style="font-family: 'Courier New'; font-size: 9px;">v</span><span ng-show="!ascendingSort" style="font-family: 'Courier New'; font-size: 11px;">^</span>
+            </a>
+        </th>
     </tr>
     
     <!-- table:body -->
@@ -35,7 +45,7 @@
     - Dont worry about styling (looking pretty, centralized, etc) it just has to show that the app is still active while the request is being made
 
     -->
-    <tr ng-repeat="todo in todos track by $index">
+    <tr ng-repeat="todo in pageData.results track by $index">
         <td>{{todo.id}}</td>
         <td>{{todo.task}}</td>
         <td>{{todo.createdDate | date:'MM/dd/yyyy' }}</td>
@@ -43,4 +53,4 @@
 </table>
 
 <!-- pagination component -->
-<pagination></pagination>
+<pagination page-data="pageData" load-page="loadPage" order-by-field="orderByField" ascending-sort="ascendingSort" ></pagination>

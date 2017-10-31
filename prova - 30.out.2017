@@ -1,0 +1,39 @@
+A) Worklog:
+
+30/10/2017 15h10 - 16h - Project Setup
+1) git fork;
+2) git clone;
+3) Build sln;
+4) Test Run;
+5) Readme.md analysis;
+6) Code analysis;
+
+30/10/2017 16h - 18h30 - Server-side
+1) Solution design;
+2) Options analysis for querying;
+3) Implementation - repository, service, controller;
+4) Tests and corrections - generic OrderBy;
+5) Tests and corrections - load itens encapsulated;
+
+30/10/2017 21h30 - 23h Front-end
+1) Tests API via PostMan;
+2) Implementation - API call, load values from API;
+
+31/10/2017 8h30 - 13h00 Front-end;
+1) Implementation - navigation on pages;
+2) Implementation - order by column selected; ascending/descending ordering;]
+3) Tests and corrections;
+
+B) Discussions:
+1. Refactoring to separate projects: front-end and server-side;
+	a) server-side as a microservice;
+2. Refactoring layers: closer to DDD principles;
+	a) create a project for service applications;
+	b) create a project for service model;
+	c) create a project for repository;
+3. Dependency injection
+	a) allow unit tests;
+	b) turn more open to extensions;
+	c) decouple projects;
+4. Components - AngularJS
+	a) separate files acordingly on front-end to make the code more maintanable, readable;
