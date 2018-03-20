@@ -1,4 +1,4 @@
-﻿(function (angular) {
+﻿(function(angular) {
     "use strict";
 
     angular
@@ -26,11 +26,23 @@
 
         function controller($scope, $http) { // example controller creating the scope bindings
             $scope.todos = [];
-            // example of xhr call to the server's 'RESTful' api
-            $http.get("api/Todo/Todos").then(response => $scope.todos = response.data);
+            $scope.$on("itemsChanged",
+                function(event, args) {
+                    $scope.todos = args;
+                });
+
+            //I think this could be improved, loading only the items corresponding from the page, not all at once, but lets keep this simple for now :)
+            $http.get("api/Todo/Todos").then(response => {
+                    $scope.todos = response.data;
+                    //we call an event to tell our pagination controller that all items has been loaded.
+                    $scope.$broadcast("itemsLoaded", $scope.todos);
+                }
+            );
+
+
         }
 
-        function link(scope, element, attrs) { }
+        function link(scope, element, attrs) {}
 
         return directive;
     }
@@ -53,13 +65,46 @@
             controller: ["$scope", controller],
             link: link
         };
+        
+         /*
+          * The pagination system works with events.
+          * When the items has been loaded, we should call the 'itemsLoaded' event to initialize the pagination system.
+          * When the items changes we call the itemsChanged event, to change the list.
+          * The bad thing about this approach is that it will probably not work properly if we have more than one pagination in the same page.
+          */
+        function controller($scope) {
+            $scope.$on("itemsLoaded",
+                function(event, args) {
+                    $scope.items = args;
+                    $scope.changePage(1);
+                });
 
-        function controller($scope) { }
+            $scope.changePage = function(newPage) {
+                var itemsLen = $scope.items.length;
+                var itemsPerPage = parseInt($scope.itemsPerPage);
+                if (isNaN($scope.itemsPerPage)) //we check if its not a number
+                    itemsPerPage = itemsLen;
 
-        function link(scope, element, attrs) { }
+
+                var totalPages = Math.ceil(itemsLen / itemsPerPage);
+                newPage = Math.max(1, Math.min(newPage, totalPages)); //clamp between 1 & totalPages
+
+                var startIdx = (newPage - 1) * itemsPerPage; //the index we should start picking the items
+                var items = $scope.items.slice(startIdx, startIdx + itemsPerPage); 
+                $scope.currentPage = newPage;
+                $scope.lastPage = totalPages;
+
+                //we call an event telling that our list has changed
+                $scope.$emit("itemsChanged", items);
+            }
+        }
+
+        function link(scope, element, attrs) {
+            //we set the default items per page
+            scope.itemsPerPage = "20";
+        }
 
         return directive;
     }
 
 })(angular);
-

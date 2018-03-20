@@ -2,25 +2,28 @@
 <div class="pagination">
     <div>
         Items per page
-        <select>
+        <select ng-model="itemsPerPage" ng-change="changePage(currentPage)">
             <!-- select how many items should be displayed per page -->
             <option>10</option>
             <option selected="selected">20</option> <!-- default option on first load should be 20 -->
             <option>30</option>
             <option>all</option> <!-- disregard pagination: show all the items -->
         </select>
+     <!--   <button ng-click="testFunc()">test</button> -->
     </div>
     <div>
-        <button>&lt;&lt;</button> <!-- 'go to first page' button -->
-        <button>&lt;</button> <!-- 'go to previous page' button: can't go lower than 1 -->
-        
-        Page <input type="number" value="1" min="1" /> <!-- input to select page to go to: go to page when input changes value --> of ??total page count here?? <!-- number of pages -->
 
-        <button>&gt;</button> <!-- 'go to next page' button: can't go higher than last page number -->
-        <button>&gt;&gt;</button> <!-- 'go to last page' button -->
+        <button ng-click="changePage(1)" >&lt;&lt;</button> <!-- 'go to first page' button -->
+        <button ng-click="changePage(currentPage-1)">&lt;</button> <!-- 'go to previous page' button: can't go lower than 1 -->
+        Page <input type="number" ng-model="currentPage" ng-change="changePage(currentPage)" min="1" max="{{lastPage}}"/> <!-- input to select page to go to: go to page when input changes value --> of {{lastPage}} <!-- number of pages -->
+
+        <button ng-click="changePage(currentPage+1)">&gt;</button> <!-- 'go to next page' button: can't go higher than last page number -->
+        <button ng-click="changePage(lastPage)">&gt;&gt;</button> <!-- 'go to last page' button -->
+
+       
     </div>
     <div>
-        <span>???total item count here??? items</span> <!-- total number of items -->
+        <span>{{items.length}} items</span> <!-- total number of items -->
     </div>
 
 </div>
