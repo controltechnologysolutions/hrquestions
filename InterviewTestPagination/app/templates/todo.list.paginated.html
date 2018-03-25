@@ -1,4 +1,4 @@
-﻿<!-- table of contents -->
+<!-- table of contents -->
 <table>
     <!-- table:header -->
     <tr>
@@ -21,9 +21,7 @@
             . the indicators don't need to look pretty, they just have to be distinct (ascending from descending) and communicate well what they're doing
 
         -->
-        <th>Id </th>
-        <th>Task </th>
-        <th>Created Date </th>
+        <th ng-repeat="column in columns">{{column}} </th>
     </tr>
     
     <!-- table:body -->
@@ -35,10 +33,8 @@
     - Dont worry about styling (looking pretty, centralized, etc) it just has to show that the app is still active while the request is being made
 
     -->
-    <tr ng-repeat="todo in todos track by $index">
-        <td>{{todo.id}}</td>
-        <td>{{todo.task}}</td>
-        <td>{{todo.createdDate | date:'MM/dd/yyyy' }}</td>
+    <tr ng-repeat="todo in showData track by $index">
+        <td ng-repeat="(key, column) in columns">{{todo[key]}}</td>
     </tr>
 </table>
 

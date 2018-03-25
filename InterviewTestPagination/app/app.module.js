@@ -1,6 +1,6 @@
 ﻿(function(angular) {
     "use strict";
 
-    angular.module("todoApp", []);
+    angular.module("todoApp", ['datatable']);
 
 })(angular);

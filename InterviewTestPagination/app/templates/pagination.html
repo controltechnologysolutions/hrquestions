@@ -2,25 +2,25 @@
 <div class="pagination">
     <div>
         Items per page
-        <select>
+        <select ng-model="itensShowPage" ng-change="updateShowItensPage()">
             <!-- select how many items should be displayed per page -->
             <option>10</option>
             <option selected="selected">20</option> <!-- default option on first load should be 20 -->
             <option>30</option>
-            <option>all</option> <!-- disregard pagination: show all the items -->
+            <option value="{{totalItens}}">all</option> <!-- disregard pagination: show all the items -->
         </select>
     </div>
     <div>
-        <button>&lt;&lt;</button> <!-- 'go to first page' button -->
-        <button>&lt;</button> <!-- 'go to previous page' button: can't go lower than 1 -->
+        <button ng-click="firstPage()">&lt;&lt;</button> <!-- 'go to first page' button -->
+        <button ng-click="backPage()">&lt;</button> <!-- 'go to previous page' button: can't go lower than 1 -->
         
-        Page <input type="number" value="1" min="1" /> <!-- input to select page to go to: go to page when input changes value --> of ??total page count here?? <!-- number of pages -->
+        Page <input type="number" value="1" min="1" ng-model="currentPage"/> <!-- input to select page to go to: go to page when input changes value --> of {{totalPages}} <!-- number of pages -->
 
-        <button>&gt;</button> <!-- 'go to next page' button: can't go higher than last page number -->
-        <button>&gt;&gt;</button> <!-- 'go to last page' button -->
+        <button ng-click="nextPage()">&gt;</button> <!-- 'go to next page' button: can't go higher than last page number -->
+        <button ng-click="lastPage()">&gt;&gt;</button> <!-- 'go to last page' button -->
     </div>
     <div>
-        <span>???total item count here??? items</span> <!-- total number of items -->
+        <span>{{totalItens}} items</span> <!-- total number of items -->
     </div>
 
 </div>
