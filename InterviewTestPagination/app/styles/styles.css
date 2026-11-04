@@ -1,25 +1,168 @@
-﻿table {
-    width: 100%;
-    text-align: center;
+﻿:root {
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --row-alt: #f9fafb;
+    --row-hover: #eef2ff;
+    --primary: #4f46e5;
+    --radius: 10px;
 }
-table th {
+
+body {
+    margin: 0;
+    padding: 32px 16px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* ---------- card ---------- */
+.todo-card {
+    max-width: 960px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* ---------- tabela ---------- */
+.todo-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.todo-table th {
+    background: #f1f3f9;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
     cursor: pointer;
+    user-select: none;
 }
-table tr:nth-child(odd) {
-    background-color: #f1f1f1;
+
+.todo-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
 }
-.pagination {
-    width: 100%;
-    margin-top: 10px;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    background-color: #f1f1f1;
+
+.todo-table tbody tr:nth-child(even) { background: var(--row-alt); }
+.todo-table tbody tr:hover { background: var(--row-hover); }
+.todo-table__task { font-weight: 500; }
+
+.todo-table__loading td,
+.todo-table__empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 16px;
 }
-.pagination > div {
-    padding: 10px;
+
+.spinner {
     display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    vertical-align: -3px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- paginação ---------- */
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #fafbfd;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+}
+
+.pagination__size,
+.pagination__nav,
+.pagination__pages {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pagination select,
+.pagination input {
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
 }
 
 .pagination input {
-    width: 30px;
+    width: 56px;
+    text-align: center;
+}
+
+.pagination select:focus,
+.pagination input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.pagination__btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.pagination__btn:hover:not([disabled]) {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.pagination__btn[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagination strong { color: var(--text); }
+
+@media (max-width: 600px) {
+    .pagination { justify-content: center; }
+}
+
+.todo-table th:hover {
+    color: var(--primary);
+}
+
+.sort-indicator {
+    display: inline-block;
+    min-width: 12px;
+    margin-left: 4px;
+    font-size: 10px;
+    color: var(--primary);
 }

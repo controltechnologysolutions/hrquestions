@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace InterviewTestPagination.Models.Todo {
     /// <summary>
-    /// TODO: Implement methods that enable pagination
+    /// Regras de negócio da paginação: transforma "página X com Y itens"
+    /// em "pule N e pegue Y" para o repositório.
     /// </summary>
     public class TodoService : IModelService<Todo> {
 
@@ -14,12 +16,35 @@ namespace InterviewTestPagination.Models.Todo {
         }
 
         /// <summary>
-        /// Example implementation of List method: lists all entries of type <see cref="Todo"/>
+        /// Lists all entries of type <see cref="Todo"/>
         /// </summary>
-        /// <returns></returns>
-        public IEnumerable<Todo> List(/* parameters */) {
-            // invoke Datasource layer
+        public IEnumerable<Todo> List() {
             return Repository.All();
+        }
+
+        public PagedResult<Todo> List(int page, int pageSize, string sortBy, string sortDir) {
+            if (pageSize < 0) pageSize = 0;
+
+            int totalItems = Repository.Count();
+
+            // pageSize 0 = "todos": tudo cabe em uma página só
+            int totalPages = pageSize == 0
+                ? 1
+                : Math.Max(1, (int)Math.Ceiling(totalItems / (double)pageSize));
+
+            // garante que a página está entre 1 e a última
+            page = Math.Max(1, Math.Min(page, totalPages));
+
+            int skip = pageSize == 0 ? 0 : (page - 1) * pageSize;
+            bool descending = string.Equals(sortDir, "desc", StringComparison.OrdinalIgnoreCase);
+
+            return new PagedResult<Todo> {
+                Items = Repository.Query(skip, pageSize, sortBy, descending),
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = totalPages
+            };
         }
     }
 }
