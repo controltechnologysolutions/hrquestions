@@ -1,0 +1,11 @@
+Tempo gasto: 1h55m (sendo ~36m de configuração do ambiente local e 1h19m de desenvolvimento)
+
+Alterações:
+- Back-end: paginação e ordenação em camadas (Controller -> Service -> Repository),
+  DTO genérico PagedResult<T>.
+- Front-end: diretiva de paginação reutilizável (10/20/30/todos, navegação,
+  input de página, totais), ordenação por cabeçalho com indicador, indicador de carregamento.
+
+Bugs encontrados e corrigidos:
+- main.js usava arrow function (ES6) em um projeto ES5.
+- Rota "api/{controller}/{id}" tratava "Todos" como {id}; corrigido com attribute routing.
